@@ -52,9 +52,6 @@ jobs:
   frontend:
     name: Frontend (Next.js)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apexRewards/frontend
 
     steps:
       - uses: actions/checkout@v4
@@ -71,19 +68,18 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        working-directory: .
 
       - name: Type check
-        run: pnpm type-check
+        run: pnpm --filter apex-rewards-frontend type-check
 
       - name: Lint
-        run: pnpm lint
+        run: pnpm --filter apex-rewards-frontend lint
 
       - name: Unit tests
-        run: pnpm test
+        run: pnpm --filter apex-rewards-frontend test
 
       - name: Build
-        run: pnpm build
+        run: pnpm --filter apex-rewards-frontend build
         env:
           NEXT_PUBLIC_STELLAR_NETWORK: testnet
           NEXT_PUBLIC_API_URL: http://localhost:3001
