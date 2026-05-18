@@ -1,0 +1,38 @@
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: "smtp.example.com:587"
+  smtp_from: "alerts@apexrewards.app"
+  smtp_auth_username: "alerts@apexrewards.app"
+  smtp_auth_password: "change_me"
+
+route:
+  group_by: ["alertname", "job"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 12h
+  receiver: apex-team
+  routes:
+    - match:
+        severity: critical
+      receiver: apex-pagerduty
+    - match:
+        severity: warning
+      receiver: apex-team
+
+receivers:
+  - name: apex-team
+    email_configs:
+      - to: "team@apexrewards.app"
+        send_resolved: true
+
+  - name: apex-pagerduty
+    pagerduty_configs:
+      - service_key: "change_me_pagerduty_key"
+        send_resolved: true
+
+inhibit_rules:
+  - source_match:
+      severity: critical
+    target_match:
+      severity: warning
+    equal: ["alertname", "job"]

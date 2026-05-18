@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apex-rewards-ingress
+  namespace: apex-rewards
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - apexrewards.app
+        - api.apexrewards.app
+      secretName: apex-rewards-tls
+  rules:
+    - host: apexrewards.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: apex-frontend
+                port:
+                  number: 3000
+    - host: api.apexrewards.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: apex-backend
+                port:
+                  number: 3001

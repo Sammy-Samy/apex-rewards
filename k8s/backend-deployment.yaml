@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apex-backend
+  namespace: apex-rewards
+  labels:
+    app: apex-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apex-backend
+  template:
+    metadata:
+      labels:
+        app: apex-backend
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/sammy-samy/apex-rewards-backend:latest
+          ports:
+            - containerPort: 3001
+          envFrom:
+            - secretRef:
+                name: apex-backend-secret
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apex-backend
+  namespace: apex-rewards
+spec:
+  selector:
+    app: apex-backend
+  ports:
+    - port: 3001
+      targetPort: 3001

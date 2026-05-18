@@ -1,0 +1,19 @@
+apiVersion: v2
+name: apex-rewards
+description: ApexRewards — Stellar blockchain loyalty rewards platform
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+home: https://github.com/Sammy-Samy/apex-rewards
+sources:
+  - https://github.com/Sammy-Samy/apex-rewards
+maintainers:
+  - name: Sammy-Samy
+    email: team@apexrewards.app
+keywords:
+  - stellar
+  - soroban
+  - loyalty
+  - rewards
+  - apex
+  - blockchain

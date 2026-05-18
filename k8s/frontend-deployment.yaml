@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apex-frontend
+  namespace: apex-rewards
+  labels:
+    app: apex-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apex-frontend
+  template:
+    metadata:
+      labels:
+        app: apex-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/sammy-samy/apex-rewards-frontend:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NEXT_PUBLIC_API_URL
+              value: "https://api.apexrewards.app"
+            - name: NEXT_PUBLIC_STELLAR_NETWORK
+              value: "mainnet"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apex-frontend
+  namespace: apex-rewards
+spec:
+  selector:
+    app: apex-frontend
+  ports:
+    - port: 3000
+      targetPort: 3000
