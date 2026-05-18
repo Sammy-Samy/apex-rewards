@@ -2,11 +2,5 @@
   "framework": "nextjs",
   "installCommand": "cd .. && pnpm install",
   "buildCommand": "pnpm build",
-  "outputDirectory": ".next",
-  "env": {
-    "NEXT_PUBLIC_API_URL": "@apex_api_url",
-    "NEXT_PUBLIC_STELLAR_NETWORK": "@apex_stellar_network",
-    "NEXT_PUBLIC_HORIZON_URL": "@apex_horizon_url",
-    "NEXT_PUBLIC_APEX_CONTRACT_ID": "@apex_contract_id"
-  }
+  "outputDirectory": ".next"
 }
